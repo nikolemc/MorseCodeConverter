@@ -12,7 +12,7 @@ namespace MorseCodeConverter
     {
         const string path = "morse.csv"; //this is where the Morse Code file lives
         const string userPath = "convertedmorse.csv";
-        static Dictionary<char, string> ConvertDictionary = new Dictionary<char, string>();
+        static Dictionary<char, string> ConvertDictionary = new Dictionary<char, string>(); //this is my dictionary for converting words
         public string Message { get; set; }
         static bool convertingWord;
 
@@ -44,7 +44,7 @@ namespace MorseCodeConverter
 
             var input = Console.ReadLine().ToUpper();
             convertingWord = input != String.Empty;
-            var rv = string.Empty;
+            var rv = string.Empty; //the string needs to hold something even if it is empty
             foreach (char Letter in input)
             {
                 if (ConvertDictionary.ContainsKey(Letter)) //Letter is the key
@@ -54,28 +54,24 @@ namespace MorseCodeConverter
                     Console.WriteLine(valueLetter); //You need to display that string back to the user in Morse Code
                 }
             }
+            using(var usersInput = new StreamWriter(userPath))  //Save the users input to a CSV as both the original string and encoded.
+            {
+
+                usersInput.WriteLine(input + ", " + rv);  /// hi,......
+
+            }
             return rv; 
         }
 
 
-        //Save the users input to a CSV as both the original string and encoded.
-       static void SaveInputToCSV(string translation)
-        {
-            using (var input = new StreamWriter(userPath))
-            {                
-                    input.WriteLine(translation);  /// hi,......
-                
-            }
-
-        }
-
+       
 
         static void Main(string[] args)
         {
             ConvertDictionary = ReadMorseCodeFromFile();
             UserInput();
             var translation =  TranslateCodeToMorseCode();  //named my TranslateCode Method as a variable to then feed into another method
-            SaveInputToCSV(translation); //feed translation variable into SaveInputToCSV Method
+           
 
         }
 
