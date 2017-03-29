@@ -54,7 +54,7 @@ namespace MorseCodeConverter
                     Console.WriteLine(valueLetter); //You need to display that string back to the user in Morse Code
                 }
             }
-            using(var usersInput = new StreamWriter(userPath))  //Save the users input to a CSV as both the original string and encoded.
+            using(var usersInput = File.AppendText(userPath))  //Save the users input to a CSV as both the original string and encoded.
             {
 
                 usersInput.WriteLine(input + ", " + rv);  /// hi,......
@@ -64,14 +64,32 @@ namespace MorseCodeConverter
         }
 
 
-       
+        //Ask the user if they have any more messages that they want to encode
+        static void MoreMessagesToConvert()
+        {
+            do
+            {
+                Console.WriteLine("Do you want convert another word to Morse code? (Y/N)");
+                convertingWord = Console.ReadLine().ToString().ToLower() == "y";
+
+                if (convertingWord)
+                {
+                    UserInput();
+                    TranslateCodeToMorseCode();
+                   
+                }
+
+            }
+            while (convertingWord) ; 
+        }
+
 
         static void Main(string[] args)
         {
             ConvertDictionary = ReadMorseCodeFromFile();
             UserInput();
             var translation =  TranslateCodeToMorseCode();  //named my TranslateCode Method as a variable to then feed into another method
-           
+            MoreMessagesToConvert();
 
         }
 
